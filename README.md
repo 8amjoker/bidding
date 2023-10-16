@@ -1,0 +1,2 @@
+# bidding
+gameing and all
