@@ -127,7 +127,8 @@ mysqli_close($conn);
         <h1><?php echo $auctionTitle; ?></h1>
         <p>Current Bid: $<?php echo $currentBid; ?></p>
 
-        <button id="place-bid-button" class="bid-button">Place Bid</button>
+        <button class="bid-button" data-bid-amount="10">Place Bid</button>
+
        
     </div>
 </div>
@@ -176,138 +177,23 @@ mysqli_close($conn);
             </div>
 </div>
 
-
-
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const auctionId = 27; 
-    const placeBidButton = document.getElementById('place-bid-button');
-    const timerElement = document.getElementById('timer');
-
-    placeBidButton.addEventListener('click', function () {
-        // Perform an AJAX request to place the bid
-        fetch('place_bid.php', {
-            method: 'POST',
-            body: JSON.stringify({
-                auctionId: auctionId, // Use the auctionId defined in PHP
-                bidAmount: 1, // You can change this value as needed
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Bid placed successfully
-                alert('Bid placed successfully.');
-                const newBidCoinBalance = data.new_balance;
-                // Update the bid coin balance displayed on the page
-                if (timerElement) {
-                    timerElement.textContent = newBidCoinBalance;
-                }
-                fetchLeaderboardData(); // Implement this function to fetch and display leaderboard data
-            } else {
-                // Handle errors (e.g., not enough bid coins)
-                alert(data.message);
-            }
-        });
-    });
-
-    // Function to fetch and display leaderboard data
-    function fetchLeaderboardData() {
-        // ... (same as previous response)
-    }
-});
-</script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    // Auction ID should be defined here from your PHP code
-    const placeBidButton = document.getElementById('place-bid-button');
-    const timerElement = document.getElementById('timer');
-
-    placeBidButton.addEventListener('click', function () {
-        // Perform an AJAX request to place the bid
-        fetch('place_bid.php', {
-            method: 'POST',
-            body: JSON.stringify({
-                auctionId: auctionId, // Use the auctionId defined in PHP
-                bidAmount: 1, // You can change this value as needed
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Bid placed successfully
-                alert('Bid placed successfully.');
-                const newBidCoinBalance = data.new_balance;
-                // Update the bid coin balance displayed on the page
-                if (timerElement) {
-                    timerElement.textContent = newBidCoinBalance;
-                }
-                fetchLeaderboardData(); // Implement this function to fetch and display leaderboard data
-            } else {
-                // Handle errors (e.g., not enough bid coins)
-                alert(data.message);
-            }
-        });
-    });
-
-    // Function to fetch and display leaderboard data
-    function fetchLeaderboardData() {
-        // Implement code to fetch and display leaderboard data here
-    }
-});
-</script>
-  
-    <script>
-        function fetchLeaderboardData() {
-            const auctionId = 1; // Replace with the actual auction ID
-
-            fetch('fetch_leaderboard.php', {
-                method: 'POST',
-                body: JSON.stringify({ auctionId: auctionId }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    // Update the leaderboard section in your HTML
-                    const leaderboardContainer = document.getElementById('leaderboard');
-                    leaderboardContainer.innerHTML = ''; // Clear the existing content
-
-                    data.forEach(item => {
-                        const leaderboardItem = document.createElement('div');
-                        leaderboardItem.classList.add('user');
-                        leaderboardItem.innerHTML = `
-                            <div class="profile">
-                                <img src="img/avatar.png" alt="">
-                            </div>
-                            <div class="name">${item.username}</div>
-                            <div class="bid">₦${item.bid_amount}</div>
-                        `;
-                        leaderboardContainer.appendChild(leaderboardItem);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching leaderboard data:', error);
-            });
+  // Add this to your menuController.js file
+document.querySelector('.bid-button').addEventListener('click', function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'bid.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (this.status == 200) {
+            alert('Bid placed successfully');
+            location.reload();  // Reload the page
+        } else {
+            alert('Error placing bid');
         }
-    </script>
-    <script>
-        var auctionId = <?php echo $auctionId; ?>; // Define auctionId from PHP
-        document.addEventListener('DOMContentLoaded', function () {
-            // ... Your existing JavaScript code using auctionId ...
-        });
-    </script>
-
+    };
+    xhr.send('auctionId=' + this.dataset.bidAmount);
+});
+</script>
 <script src="./js/menuController.js"></script>
 
 
