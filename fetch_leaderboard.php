@@ -10,7 +10,7 @@ function fetchLeaderboardData($auctionId) {
     // Query to retrieve the top bidders for the specified auction
     $sql = "SELECT username, bid_amount FROM bids
             WHERE auction_id = $auctionId
-            ORDER BY bid_amount DESC
+            ORDER BY bid_time DESC
             LIMIT 10"; // Adjust the limit as needed
 
     $result = mysqli_query($conn, $sql);
@@ -37,3 +37,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode($leaderboardData);
     }
 }
+?>
