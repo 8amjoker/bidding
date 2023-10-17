@@ -194,6 +194,46 @@ document.querySelector('.bid-button').addEventListener('click', function() {
     xhr.send('auctionId=' + this.dataset.bidAmount);
 });
 </script>
+    <script>
+    function fetchLeaderboardData() {
+    const auctionId = <?php echo $auctionId; ?>; // Replace with the actual auction ID
+
+    fetch('fetch_leaderboard.php', {
+        method: 'POST',
+        body: JSON.stringify({ auctionId: auctionId }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.length > 0) {
+            // Update the leaderboard section in your HTML
+            const leaderboardContainer = document.getElementById('leaderboard');
+            leaderboardContainer.innerHTML = ''; // Clear the existing content
+
+            data.forEach(item => {
+                const leaderboardItem = document.createElement('div');
+                leaderboardItem.classList.add('user');
+                leaderboardItem.innerHTML = `
+                    <div class="profile">
+                        <img src="img/avatar.png" alt="">
+                    </div>
+                    <div class="name">${item.username}</div>
+                    <div class="bid">₦${item.bid_amount}</div>
+                `;
+                leaderboardContainer.appendChild(leaderboardItem);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching leaderboard data:', error);
+    });
+}
+
+// Call the function to fetch and display the leaderboard data
+fetchLeaderboardData();
+</script>
 <script src="./js/menuController.js"></script>
 
 
