@@ -147,11 +147,12 @@ mysqli_close($conn);
         </div>
     </div>
 
-            <div id="leaderboard">
-                       
-            <div class="btn">
-            <button id="place-bid-button">Bid bot</button>
-            </div>
+    <div id="leaderboard">
+    <h2>Leaderboard</h2>
+    <ul id="leaderboard-list">
+        <!-- Leaderboard data will be inserted here by JavaScript -->
+    </ul>
+</div>
 </div>
 
 <script>
@@ -187,20 +188,21 @@ document.querySelector('.bid-button').addEventListener('click', function() {
     .then(data => {
         if (data.length > 0) {
             // Update the leaderboard section in your HTML
-            const leaderboardContainer = document.getElementById('leaderboard');
-            leaderboardContainer.innerHTML = ''; // Clear the existing content
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = ''; // Clear the existing content
 
             data.forEach(item => {
-                const leaderboardItem = document.createElement('div');
-                leaderboardItem.classList.add('user');
+                const leaderboardItem = document.createElement('li');
                 leaderboardItem.innerHTML = `
-                    <div class="profile">
-                        <img src="img/avatar.png" alt="">
+                    <div class="user">
+                        <div class="profile">
+                            <img src="img/avatar.png" alt="">
+                        </div>
+                        <div class="name">${item.username}</div>
+                        <div class="bid">₦${item.bid_amount}</div>
                     </div>
-                    <div class="name">${item.username}</div>
-                    <div class="bid">₦${item.bid_amount}</div>
                 `;
-                leaderboardContainer.appendChild(leaderboardItem);
+                leaderboardList.appendChild(leaderboardItem);
             });
         }
     })
