@@ -89,14 +89,14 @@
 
 include("db.php");
 
-// Check the connection
+
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
 
 if (isset($_GET['id'])) {
-    $auctionId = intval($_GET['id']); // Convert to an integer
+    $auctionId = intval($_GET['id']); 
 } else {
    
     $auctionId = 1; 
@@ -148,30 +148,7 @@ mysqli_close($conn);
     </div>
 
             <div id="leaderboard">
-                <div class="user">
-                    <div class="profile">
-                        <img src="img/avatar.png" alt="">
-                    </div>
-                    <div class="name">kevewe</div>
-                    <div class="bid">₦70</div>
-                </div>
-
-                <div class="user">
-                <div class="profile">
-                        <img src="img/avatar.png" alt="">
-                    </div>
-                    <div class="name">light</div>
-                    <div class="bid">₦40</div>
-                </div>
-
-                <div class="user">
-                <div class="profile">
-                        <img src="img/avatar.png" alt="">
-                    </div>
-                    <div class="name">potato</div>
-                    <div class="bid">₦30</div>
-                </div>
-            </div>
+                       
             <div class="btn">
             <button id="place-bid-button">Bid bot</button>
             </div>
@@ -186,6 +163,7 @@ document.querySelector('.bid-button').addEventListener('click', function() {
     xhr.onload = function() {
         if (this.status == 200) {
             alert('Bid placed successfully');
+            fetchLeaderboardData();  // Fetch and update the leaderboard data
             location.reload();  // Reload the page
         } else {
             alert('Error placing bid');
@@ -194,7 +172,7 @@ document.querySelector('.bid-button').addEventListener('click', function() {
     xhr.send('auctionId=' + this.dataset.bidAmount);
 });
 </script>
-    <script>
+<script>
     function fetchLeaderboardData() {
     const auctionId = <?php echo $auctionId; ?>; // Replace with the actual auction ID
 
@@ -231,8 +209,6 @@ document.querySelector('.bid-button').addEventListener('click', function() {
     });
 }
 
-// Call the function to fetch and display the leaderboard data
-fetchLeaderboardData();
 </script>
 <script src="./js/menuController.js"></script>
 
